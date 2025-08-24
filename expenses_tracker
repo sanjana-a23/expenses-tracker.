@@ -1,0 +1,46 @@
+import csv
+from datetime import datetime
+
+FILENAME = "expenses.csv"
+
+def add_expense(name, amount):
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(FILENAME, "a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow([date, name, amount])
+    print("✅ Expense added successfully!")
+
+def view_expenses():
+    try:
+        with open(FILENAME, "r") as file:
+            reader = csv.reader(file)
+            total = 0
+            print("\nYour Expenses:")
+            print("-" * 40)
+            for row in reader:
+                print(f"{row[0]} | {row[1]} | ₹{row[2]}")
+                total += float(row[2])
+            print("-" * 40)
+            print(f"Total Spent: ₹{total}")
+    except FileNotFoundError:
+        print("⚠ No expenses recorded yet.")
+
+# Simple menu
+while True:
+    print("\n--- Expenses Tracker ---")
+    print("1. Add Expense")
+    print("2. View Expenses")
+    print("3. Exit")
+    choice = input("Enter choice: ")
+
+    if choice == "1":
+        name = input("Enter expense name: ")
+        amount = input("Enter amount: ")
+        add_expense(name, amount)
+    elif choice == "2":
+        view_expenses()
+    elif choice == "3":
+        print("Goodbye 👋")
+        break
+    else:
+        print("Invalid choice! Try again.")
